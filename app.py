@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 app = Flask(__name__)
 
 genai.configure(api_key="AIzaSyAbmCYsZsjfCPf-uakFksDglYasW4EsehE")
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.get_model('gemini-1.5-flash')
 
 @app.route('/')
 def home():
@@ -40,7 +40,7 @@ def chatbot():
 def get_response():
     data = request.json
     user_message = data['message']
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.get_model('gemini-1.5-flash')
     rply = model.generate_content(f"{user_message}  answer in one or 2 lines without any */ symbols")
 
     return jsonify({'response': rply.text})
@@ -50,7 +50,7 @@ def web():
     return render_template('web-summary.html')
 
 def summarize_text(text):
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.get_model('gemini-1.5-flash')
     rply = model.generate_content("Summarize this webpage and give me the summary of this webpage: " + text)
     to_markdown(rply.text)
     return rply.text
@@ -89,7 +89,7 @@ def code():
 @app.route('/generate', methods=['POST'])
 def generate_html():
     prompt = request.form['prompt']
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.get_model('gemini-1.5-flash')
     rply = model.generate_content("Generate both html and css code in single file for " + prompt + " with colorful CSS background and more attractive CSS, I need only code and no explanation")
     html_content = rply.text
 
@@ -147,7 +147,7 @@ def quiz():
 
     if request.method == 'POST':
         topic = request.form.get('topic')
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.get_model('gemini-1.5-flash')
         response = model.generate_content(
             f"""Create a 5-question multiple-choice quiz on the topic of {topic}. 
                Provide the questions, four answer options for each question, and the correct answer. 
@@ -238,7 +238,7 @@ def code1():
 @app.route('/road', methods=['POST'])
 def generate_html1():
     prompt = request.form['prompt']
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.get_model('gemini-1.5-flash')
     rply = model.generate_content("Generate both html and css code in single file for Roadmap on topic " + prompt + " with 30 days study plans and resources ,colorful CSS background and more attractive CSS, I need only code and no explanation")
     html_content = rply.text
 
@@ -301,7 +301,7 @@ def gpt():
         # Generate response using the transcribed text
         if transcribed_text:
             # Generate response using Generative AI model
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.get_model('gemini-pro')
             rply = model.generate_content("explain in 3 lines"+ transcribed_text)
             response_text = rply.text
             print(response_text)
